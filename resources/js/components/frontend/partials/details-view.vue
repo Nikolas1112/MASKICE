@@ -121,36 +121,42 @@
               <div class="sg-product-price" v-else>
                 <span>{{ priceFormat(productDetails.price) }} </span>
               </div>
-              <div class="sg-product-color" v-if="productDetails.product_colors && productDetails.colors.length > 0">
+              <div class="sg-product-color" v-if="productDetails.product_colors && productDetails.product_colors.length > 0">
                 <div class="sg-color">
                   <h5>{{ lang.color }}:</h5>
-                  <div v-for="(color, index) in productDetails.product_colors" :key="'color' + index">
-                    <input type="radio" value="color1" :id="'color' + color.id" v-model="product_form.color_id"
-                           :value="color.id" @change="attributeSelect($event.target)"/>
-                    <label :for="'color' + color.id">
-                      <span :style="'background:' + color.code"></span>
-                    </label>
-                  </div>
+                  <select v-model="product_form.color_id"
+                          @change="saveSelectedColor"
+                          class="form-select">
+                    <option v-for="(color, index) in productDetails.product_colors"
+                            :key="'color' + index"
+                            :value="color.id">
+                      {{ color.name }}
+                    </option>
+                  </select>
                 </div>
               </div>
-              <!-- sg-product-color -->
-              <div class="sg-product-size" v-for="(attribute, attribute_index) in attributes"
-                   :key="'attribute' + attribute_index" v-if="attributes.length > 0">
-                <div class="sg-size">
+
+              <!-- Size Selection -->
+              <div class="sg-product-size" style="gap: 10px; padding: auto;" v-if="attributes.length > 0">
+                <div class="sg-size"
+                    style="display: flex; flex-direction: column; gap: 5px; align-items: baseline;"
+                    v-for="(attribute, attribute_index) in attributes"
+                    :key="'attribute' + attribute_index">
                   <h5>{{ attribute.title }}:</h5>
-                  <form action="#">
-                    <div v-for="(value, value_index) in productDetails.attribute_values" :key="'value' + value_index"
-                         v-if="value.attribute_id == attribute.id">
-                      <input type="radio" :id="attribute.id + '_attribute_' + value.id" :value="value.id"
-                             v-model="product_form.attribute_values[attribute_index]"
-                             @change="attributeSelect($event.target,attribute.id,value.id)"
-                             :disabled="checkDisable(attribute_index,value)"/>
-                      <label :for="attribute.id + '_attribute_' + value.id"
-                             :class="{ 'disabled_radio' : checkDisable(attribute_index,value) }">{{
-                          value.value
-                        }}</label>
-                    </div>
-                  </form>
+                  <select v-model="product_form.attribute_values[attribute_index]"
+                          @change="attributeSelect($event.target, attribute.id, $event.target.value)"
+                          class="form-select"
+                          style="min-width: 143px;"
+                          :disabled="productDetails.attribute_values.filter(value => value.attribute_id === attribute.id).length === 0">
+                    <option v-for="(value, value_index) in productDetails.attribute_values"
+                            :key="'value' + value_index"
+                            v-if="value.attribute_id == attribute.id"
+                            :value="value.id"
+                            :selected="value_index === value.id"
+                            :disabled="checkDisable(attribute_index, value)">
+                      {{ value.value }}
+                    </option>
+                  </select>
                 </div>
               </div>
 
