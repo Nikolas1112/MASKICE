@@ -351,5 +351,17 @@ class RepositoryServiceProvider extends ServiceProvider{
             'App\Repositories\Interfaces\Admin\FontInterface',
             'App\Repositories\Admin\FontRepository'
         );
+
+        //email-template
+        $this->app->bind(
+            'App\Repositories\Interfaces\Admin\EmailTemplateInterface',
+            'App\Repositories\Admin\EmailTemplateRepository'
+        );
+
+        //email-template language
+        $this->app->bind(
+            'App\Repositories\Interfaces\Admin\EmailTemplateLanguageInterface',
+            'App\Repositories\Admin\EmailTemplateLanguageRepository'
+        );
     }
 }

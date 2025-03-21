@@ -7,6 +7,7 @@
  */
 
 use App\Http\Controllers\Admin\Addons\ShippingClassController;
+use App\Http\Controllers\Admin\EmailTemplateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FontController;
 use App\Http\Controllers\Admin\RoleController;
@@ -595,6 +596,14 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                 Route::get('import-sellers',[SellerController::class, 'sellerImport'])->name('admin.seller.import')->middleware('PermissionCheck:seller_create');
                 Route::post('import-sellers',[SellerController::class, 'importSeller'])->name('admin.seller.import.post')->middleware('PermissionCheck:seller_create');
                 Route::get('import-cities',[ShippingController::class, 'importCity'])->name('import.city');
+
+                //Template
+                Route::get('email-templates', [EmailTemplateController::class, 'index'])->name('templates.index');
+                Route::get('email-templates/create', [EmailTemplateController::class, 'create'])->name('templates.create');
+                Route::post('email-templates', [EmailTemplateController::class, 'store'])->name('templates.store');
+                Route::get('email-templates/{template}/edit', [EmailTemplateController::class, 'edit'])->name('templates.edit');
+                Route::put('email-templates/{template}', [EmailTemplateController::class, 'update'])->name('templates.update');
+                Route::delete('delete/email_templates/{template}', [CommonController::class, 'delete']);
             });
         });
     });

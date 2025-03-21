@@ -81,7 +81,10 @@
                 </li>
             @endif
 
-
+            <li class="@yield('template_active')"><a class="nav-link" href="{{ route('templates.index') }}"><i
+                            class="bx bxs-envelope"></i>
+                    <span>{{ __('Email Template') }}</span></a>
+            </li>
             @if(hasPermission('product_read') || hasPermission('color_read') || hasPermission('attribute_set_read') || hasPermission('brand_read') || hasPermission('category_read') || hasPermission('attribute_value_read'))
                 <li class="nav-item dropdown @yield('product_active')">
                     <a href="javaScript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">
