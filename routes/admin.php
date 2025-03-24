@@ -56,6 +56,7 @@ use App\Http\Controllers\Admin\StoreFront\StoreFrontController;
 use App\Http\Controllers\Admin\Payment\PaymentGatewayController;
 use App\Http\Controllers\Admin\Setup\AdminPanelSettingController;
 use App\Http\Controllers\Admin\Support\SupportDepartmentController;
+use App\Http\Controllers\Admin\WareHouseController;
 
 Route::get('change-currency/{id}', [GeneralSettingsController::class, 'currencyChange'])->name('admin.change.currency');
 Route::get('change-lang/{id}', [GeneralSettingsController::class, 'langChange'])->name('admin.change.lang');
@@ -604,6 +605,9 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                 Route::get('email-templates/{template}/edit', [EmailTemplateController::class, 'edit'])->name('templates.edit');
                 Route::put('email-templates/{template}', [EmailTemplateController::class, 'update'])->name('templates.update');
                 Route::delete('delete/email_templates/{template}', [CommonController::class, 'delete']);
+
+                //warehouse
+                Route::get('warehouse', [WarehouseController::class, 'index'])->name('warehouse.index');
             });
         });
     });
