@@ -81,6 +81,21 @@
                 </li>
             @endif
 
+            <li class="nav-item dropdown @yield('administrators_active')">
+                <a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">
+                <i class="bx bxs-group"></i>
+                    <span>{{ __('Administrators') }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="@yield('permission_active')">
+                        <a class="nav-link" href="{{ route('permission.index') }}">
+                            <i class="bx bx-lock"></i>
+                            <span>{{ __('Permissions') }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li class="@yield('template_active')"><a class="nav-link" href="{{ route('templates.index') }}"><i
                             class="bx bxs-envelope"></i>
                     <span>{{ __('Email Template') }}</span></a>

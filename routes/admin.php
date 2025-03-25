@@ -58,6 +58,7 @@ use App\Http\Controllers\Admin\Setup\AdminPanelSettingController;
 use App\Http\Controllers\Admin\Support\SupportDepartmentController;
 use App\Http\Controllers\Admin\WareHouseController;
 use App\Http\Controllers\Admin\PhysicalShopController;
+use App\Http\Controllers\Admin\PermissionController;
 
 Route::get('change-currency/{id}', [GeneralSettingsController::class, 'currencyChange'])->name('admin.change.currency');
 Route::get('change-lang/{id}', [GeneralSettingsController::class, 'langChange'])->name('admin.change.lang');
@@ -617,6 +618,14 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                 Route::get('physical-shop/{id}/edit', [PhysicalShopController::class, 'edit'])->name('physical_shops.edit');
                 Route::put('physical-shop/{physicalShop}', [PhysicalShopController::class, 'update'])->name('physical_shops.update');
                 Route::delete('delete/physical_shops/{physicalShop}', [CommonController::class, 'delete']);
+
+                 //Admistrator
+                 Route::get('permission', [PermissionController::class, 'index'])->name('permission.index');
+                 Route::get('permission/create', [PermissionController::class, 'create'])->name('permission.create');
+                 Route::post('permission', [PermissionController::class, 'store'])->name('permission.store');
+                 Route::get('permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
+                 Route::put('permission/{permission}', [PermissionController::class, 'update'])->name('permission.update');
+                 Route::delete('delete/permissions/{permission}', [CommonController::class, 'delete']);
             });
         });
     });

@@ -369,5 +369,11 @@ class RepositoryServiceProvider extends ServiceProvider{
             'App\Repositories\Interfaces\Admin\PhysicalShopInterface',
             'App\Repositories\Admin\PhysicalShopRepository'
         );
+
+        //permission
+        $this->app->bind(
+            'App\Repositories\Interfaces\Admin\PermissionInterface',
+            'App\Repositories\Admin\PermissionRepository'
+        );
     }
 }
