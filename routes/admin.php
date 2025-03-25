@@ -57,6 +57,7 @@ use App\Http\Controllers\Admin\Payment\PaymentGatewayController;
 use App\Http\Controllers\Admin\Setup\AdminPanelSettingController;
 use App\Http\Controllers\Admin\Support\SupportDepartmentController;
 use App\Http\Controllers\Admin\WareHouseController;
+use App\Http\Controllers\Admin\PhysicalShopController;
 
 Route::get('change-currency/{id}', [GeneralSettingsController::class, 'currencyChange'])->name('admin.change.currency');
 Route::get('change-lang/{id}', [GeneralSettingsController::class, 'langChange'])->name('admin.change.lang');
@@ -608,6 +609,14 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
 
                 //warehouse
                 Route::get('warehouse', [WarehouseController::class, 'index'])->name('warehouse.index');
+
+                //physical shop
+                Route::get('physical-shops', [PhysicalShopController::class, 'index'])->name('physical_shops.index');
+                Route::get('physical-shop/create', [PhysicalShopController::class, 'create'])->name('physical_shops.create');
+                Route::post('physical-shops', [PhysicalShopController::class, 'store'])->name('physical_shops.store');
+                Route::get('physical-shop/{id}/edit', [PhysicalShopController::class, 'edit'])->name('physical_shops.edit');
+                Route::put('physical-shop/{physicalShop}', [PhysicalShopController::class, 'update'])->name('physical_shops.update');
+                Route::delete('delete/physical_shops/{physicalShop}', [CommonController::class, 'delete']);
             });
         });
     });

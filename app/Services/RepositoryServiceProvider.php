@@ -363,5 +363,11 @@ class RepositoryServiceProvider extends ServiceProvider{
             'App\Repositories\Interfaces\Admin\EmailTemplateLanguageInterface',
             'App\Repositories\Admin\EmailTemplateLanguageRepository'
         );
+
+        //physical-show
+        $this->app->bind(
+            'App\Repositories\Interfaces\Admin\PhysicalShopInterface',
+            'App\Repositories\Admin\PhysicalShopRepository'
+        );
     }
 }
