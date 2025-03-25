@@ -22,6 +22,7 @@
     "ext-zip": "*",
     "brian2694/laravel-toastr": "^5.57",
     "cartalyst/sentinel": "^v5.1.0",
+    "endroid/qr-code": "^6.0",
     "fruitcake/laravel-cors": "^2.2.0",
     "geo-sot/laravel-env-editor": "^1.1",
     "guzzlehttp/guzzle": "^7.4.1",

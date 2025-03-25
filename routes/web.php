@@ -23,6 +23,7 @@ use App\Http\Controllers\Site\ProductController;
 use App\Http\Controllers\Site\SocialController;
 use App\Http\Controllers\Site\UserController;
 use App\Http\Controllers\Site\WishlistController;
+use App\Http\Controllers\Site\QrcodeController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
@@ -242,6 +243,7 @@ Route::middleware(['XSS', 'isInstalled'])->group(function () {
     Route::post('home/product-by-search/{searchKey}', [ProductController::class, 'productBySearch'])->name('product.by.search.post');
     Route::post('home/subscribers', [FrontendController::class, 'subscribers'])->name('front.subscribers');
     Route::post('home/product-view', [ProductController::class, 'productView'])->name('product.view');
+    Route::post('home/generate-qrcode', [QrcodeController::class, 'generateQrcode'])->name('product.generate_qrcode');;
 
     //cart
     Route::get('cart/list', [CartController::class, 'index'])->name('user.cart.list');

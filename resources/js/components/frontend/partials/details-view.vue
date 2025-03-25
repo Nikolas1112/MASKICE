@@ -144,7 +144,7 @@
                     :key="'attribute' + attribute_index">
                   <h5>{{ attribute.title }}:</h5>
                   <select v-model="product_form.attribute_values[attribute_index]"
-                          @change="attributeSelect($event.target, attribute.id, $event.target.value)"
+                          @change="attributeSelect($event.target, attribute.id, $event.target.value); fetchBarcode()"
                           class="form-select"
                           style="min-width: 143px;"
                           :disabled="productDetails.attribute_values.filter(value => value.attribute_id === attribute.id).length === 0">
@@ -159,7 +159,9 @@
                   </select>
                 </div>
               </div>
-
+              <div v-if="barcode" class="barcode-container" style="margin-top: 10px;margin-bottom: 10px;max-width: 20%;">
+                <img :src="barcode.qr_code_url" alt="Barcode">
+              </div>
               <div class="product-quantity product-border"
                    v-if="settings.wholesale_price_variations_show == 1 && productDetails.is_wholesale && productDetails.wholesale_prices.length > 0">
                 <table>
@@ -687,6 +689,7 @@ import StarRating from "vue-star-rating";
 import loading_button from "./loading_button";
 import productVideo from "./product-video";
 import single_seller from "./single_seller";
+import axios from "axios";
 
 export default {
   name: "details-view",
@@ -852,6 +855,18 @@ export default {
     },
   },
   methods: {
+    async fetchBarcode() {
+      try {
+        const selectedVariation = this.product_form.attribute_values.find(attr => attr);
+        if (!selectedVariation) return;
+        const response = await axios.post("/home/generate-qrcode", {
+          product_id: selectedVariation,
+        });
+        this.barcode = response.data;
+      } catch (error) {
+        console.error("Error fetching barcode:", error);
+      }
+    },
     activeImage(imageIndex) {
       this.current_index = imageIndex;
       this.large_image = this.productDetails.gallery.large[imageIndex];
