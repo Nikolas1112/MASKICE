@@ -35,7 +35,7 @@
                                 @endisset
 
                                 <div class="form-group">
-                                    <label for="name">{{__('Shop Name')}}</label>
+                                    <label for="name">{{__('Name')}}</label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         value="{{ isset($edit) ? $edit->name : old('name') }}" required>
                                 </div>
@@ -49,7 +49,7 @@
 
                                 <div class="form-group text-right">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ isset($edit) ? __('Update Shop') : __('Create Shop') }}
+                                        {{ isset($edit) ? __('Update') : __('Save') }}
                                     </button>
                                 </div>
                             </form>

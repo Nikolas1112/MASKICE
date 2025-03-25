@@ -22,6 +22,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
+                        <form action="">
+                            <div class="card-header input-title">
+                                <h4>{{__('Physical shop')}}</h4>
+                            </div>
+                        </form>
                         <div class="card-body p-0">
                             <div class="table-responsive">
                                 <table class="table table-striped">
