@@ -59,6 +59,7 @@ use App\Http\Controllers\Admin\Support\SupportDepartmentController;
 use App\Http\Controllers\Admin\WareHouseController;
 use App\Http\Controllers\Admin\PhysicalShopController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\EmployeeController;
 
 Route::get('change-currency/{id}', [GeneralSettingsController::class, 'currencyChange'])->name('admin.change.currency');
 Route::get('change-lang/{id}', [GeneralSettingsController::class, 'langChange'])->name('admin.change.lang');
@@ -627,6 +628,15 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                  Route::get('permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
                  Route::put('permission/{permission}', [PermissionController::class, 'update'])->name('permission.update');
                  Route::delete('delete/permissions/{permission}', [CommonController::class, 'delete']);
+
+                 //Employee
+                  Route::get('employees', [EmployeeController::class, 'index'])->name('employee.index');
+                  Route::get('employees/create', [EmployeeController::class, 'create'])->name('employee.create');
+                  Route::post('employees', [EmployeeController::class, 'store'])->name('employee.store');
+                  Route::get('employees/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
+                  Route::put('employees/{employee}', [EmployeeController::class, 'update'])->name('employee.update');
+                  Route::delete('delete/employees/{employee}', [CommonController::class, 'delete']);
+
             });
         });
     });

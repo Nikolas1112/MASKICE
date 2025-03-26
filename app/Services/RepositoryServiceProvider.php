@@ -375,5 +375,11 @@ class RepositoryServiceProvider extends ServiceProvider{
             'App\Repositories\Interfaces\Admin\PermissionInterface',
             'App\Repositories\Admin\PermissionRepository'
         );
+
+         //employee
+         $this->app->bind(
+            'App\Repositories\Interfaces\Admin\EmployeeInterface',
+            'App\Repositories\Admin\EmployeeRepository'
+        );
     }
 }

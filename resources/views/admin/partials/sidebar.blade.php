@@ -94,6 +94,14 @@
                         </a>
                     </li>
                 </ul>
+                <ul class="dropdown-menu">
+                    <li class="@yield('employee_active')">
+                        <a class="nav-link" href="{{ route('employee.index') }}">
+                            <i class="bx bx-user"></i>
+                            <span>{{ __('Employee') }}</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <li class="@yield('template_active')"><a class="nav-link" href="{{ route('templates.index') }}"><i
