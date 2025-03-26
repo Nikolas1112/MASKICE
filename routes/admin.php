@@ -489,6 +489,7 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                     Route::get('user-searches', [ReportController::class, 'userSearches'])->name('user.searches')->middleware('PermissionCheck:user_searches_read');
                     Route::get('commission-history', [ReportController::class, 'commissionHistory'])->name('commission.history')->middleware('PermissionCheck:commission_history_read');
                     Route::get('wallet-recharge-history', [ReportController::class, 'walletRecharge'])->name('wallet.recharge.history')->middleware('PermissionCheck:wallet_recharge_history_read');
+                    Route::get('order-report', [ReportController::class, 'orderReport'])->name('order.report');
                 });
 
                 //Wallet Route

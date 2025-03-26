@@ -123,4 +123,43 @@ class ReportController extends Controller
         }
     }
 
+
+    public function orderReport(Request $request){
+        try {
+
+            $request = $request->toArray();
+            $timePeriod = $request['time_period'] ?? 'today';
+
+            $totalOrderCount = $this->reports->totalOrderCount($timePeriod);
+            $totalAmountOfOrder = $this->reports->totalAmountOfOrder($timePeriod);
+            $totalOrderWithFees = $this->reports->totalOrderWithFees($timePeriod);
+            $totalOrderWithoutFees = $this->reports->totalOrderWithoutFees($timePeriod);
+            $argOrderPerDay = $this->reports->averageOrdersPerDay($timePeriod);
+            $numberOfOrderByCitiesChartData = $this->reports->numberOfOrderByCities($timePeriod);
+
+            // Map time period to text
+            $timePeriodText = $this->getTimePeriodText($timePeriod);
+
+            return view('admin.reports.orders',compact('totalOrderCount','timePeriod','totalAmountOfOrder','totalOrderWithFees','totalOrderWithoutFees','timePeriodText','argOrderPerDay','numberOfOrderByCitiesChartData'));
+        } catch (\Exception $e) {
+            Toastr::error($e->getMessage());
+            return back();
+        }
+    }
+
+
+    private function getTimePeriodText($timePeriod) {
+        $timePeriods = [
+            'today' => 'Today',
+            'yesterday' => 'Yesterday',
+            'last_seven_days' => 'Last 7 Days',
+            'this_month' => 'This Month',
+            'last_month' => 'Last Month',
+            'yearly' => 'Yearly',
+        ];
+    
+        // Return the corresponding text for the time period or default to 'Today'
+        return $timePeriods[$timePeriod] ?? 'Today';
+    }
+
 }

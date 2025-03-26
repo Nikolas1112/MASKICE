@@ -414,6 +414,10 @@
                                                                    href="{{ route('user.searches') }}">{{ __('User Searches') }}</a>
                             </li>
                         @endif
+
+                        <li class="@yield('order_report_active')">
+                            <a class="nav-link" href="{{route('order.report')}}">{{ __('Order Report') }}</a>
+                        </li>
                     </ul>
                 </li>
             @endif

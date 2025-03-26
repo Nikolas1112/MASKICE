@@ -3,6 +3,7 @@
 namespace App\Repositories\Admin;
 
 use App\Models\CommissionHistory;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Search;
 use App\Models\Wallet;
@@ -174,4 +175,302 @@ class ReportsRepository implements ReportsInterface
             ->paginate($limit);
     }
 
+
+
+    public function totalOrderCount($timePeriod){
+
+        switch($timePeriod){
+            case 'today':
+                $orders = Order::whereDate('date', Carbon::today()->toDateString())->get(); // Orders placed today
+                break;
+        
+            case 'yesterday':
+                $orders = Order::whereDate('date', Carbon::yesterday()->toDateString())->get(); // Orders placed yesterday
+                break;
+        
+            case 'last_seven_days':
+                $orders = Order::where('date', '>=', Carbon::now()->subDays(7)->toDateString())->get(); // Orders placed in the last 7 days
+                break;
+        
+            case 'this_month':
+                // For Orders in This Month
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfMonth()->toDateString())->get();
+                break;
+        
+            case 'last_month':
+                $orders = Order::where('created_at', '>=', Carbon::now()->subMonth()->startOfMonth()->toDateString()) // First day of last month
+                                ->where('created_at', '<', Carbon::now()->startOfMonth()->toDateString()) // Before this month starts
+                                ->get();
+                break;
+        
+            case 'yearly':
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfYear()->toDateString())->get();
+                break;
+        
+            default:
+                $orders = Order::all(); // Get all orders if no valid time period is provided
+                break;
+        }
+        
+        return (!empty($orders)) ? count($orders) : 0;
+    }
+
+
+
+
+    public function totalAmountOfOrder($timePeriod){
+
+        switch($timePeriod){
+            case 'today':
+                $orders = Order::whereDate('date', Carbon::today()->toDateString())->get(); // Orders placed today
+                break;
+        
+            case 'yesterday':
+                $orders = Order::whereDate('date', Carbon::yesterday()->toDateString())->get(); // Orders placed yesterday
+                break;
+        
+            case 'last_seven_days':
+                $orders = Order::where('date', '>=', Carbon::now()->subDays(7)->toDateString())->get(); // Orders placed in the last 7 days
+                break;
+        
+            case 'this_month':
+                // For Orders in This Month
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfMonth()->toDateString())->get();
+                break;
+        
+            case 'last_month':
+                $orders = Order::where('created_at', '>=', Carbon::now()->subMonth()->startOfMonth()->toDateString()) // First day of last month
+                                ->where('created_at', '<', Carbon::now()->startOfMonth()->toDateString()) // Before this month starts
+                                ->get();
+                break;
+        
+            case 'yearly':
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfYear()->toDateString())->get();
+                break;
+        
+            default:
+                $orders = Order::all(); // Get all orders if no valid time period is provided
+                break;
+        }
+
+        // Sum the total_payable_amount for all orders
+        $totalAmount = $orders->sum('total_payable');
+
+        return $totalAmount;
+    }
+
+
+
+    public function totalOrderWithFees($timePeriod)
+    {
+        switch ($timePeriod) {
+            case 'today':
+                $orders = Order::whereDate('date', Carbon::today()->toDateString())
+                               ->where('total_tax', '>', 0) // Filter orders with non-zero tax
+                               ->get(); // Orders placed today
+                break;
+    
+            case 'yesterday':
+                $orders = Order::whereDate('date', Carbon::yesterday()->toDateString())
+                               ->where('total_tax', '>', 0) // Orders placed yesterday with non-zero tax
+                               ->get();
+                break;
+    
+            case 'last_seven_days':
+                $orders = Order::where('date', '>=', Carbon::now()->subDays(7)->toDateString())
+                               ->where('total_tax', '>', 0) // Orders placed in the last 7 days with non-zero tax
+                               ->get();
+                break;
+    
+            case 'this_month':
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfMonth()->toDateString())
+                               ->where('total_tax', '>', 0) // Orders in this month with non-zero tax
+                               ->get();
+                break;
+    
+            case 'last_month':
+                $orders = Order::where('created_at', '>=', Carbon::now()->subMonth()->startOfMonth()->toDateString()) // First day of last month
+                               ->where('created_at', '<', Carbon::now()->startOfMonth()->toDateString()) // Before this month starts
+                               ->where('total_tax', '>', 0) // Orders from last month with non-zero tax
+                               ->get();
+                break;
+    
+            case 'yearly':
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfYear()->toDateString())
+                               ->where('total_tax', '>', 0) // Orders from this year with non-zero tax
+                               ->get();
+                break;
+    
+            default:
+                $orders = Order::where('total_tax', '>', 0) // Default case: filter orders with non-zero tax
+                               ->get();
+                break;
+        }
+    
+        $totalOrderWithFees = (!empty($orders)) ? count($orders) : 0;
+    
+        return $totalOrderWithFees;
+    }
+    
+
+    public function totalOrderWithoutFees($timePeriod)
+    {
+        switch ($timePeriod) {
+            case 'today':
+                $orders = Order::whereDate('date', Carbon::today()->toDateString())
+                               ->where('total_tax', '=', 0) // Filter orders with non-zero tax
+                               ->get(); // Orders placed today
+                break;
+    
+            case 'yesterday':
+                $orders = Order::whereDate('date', Carbon::yesterday()->toDateString())
+                               ->where('total_tax', '=', 0) // Orders placed yesterday with non-zero tax
+                               ->get();
+                break;
+    
+            case 'last_seven_days':
+                $orders = Order::where('date', '>=', Carbon::now()->subDays(7)->toDateString())
+                               ->where('total_tax', '=', 0) // Orders placed in the last 7 days with non-zero tax
+                               ->get();
+                break;
+    
+            case 'this_month':
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfMonth()->toDateString())
+                               ->where('total_tax', '=', 0) // Orders in this month with non-zero tax
+                               ->get();
+                break;
+    
+            case 'last_month':
+                $orders = Order::where('created_at', '>=', Carbon::now()->subMonth()->startOfMonth()->toDateString()) // First day of last month
+                               ->where('created_at', '<', Carbon::now()->startOfMonth()->toDateString()) // Before this month starts
+                               ->where('total_tax', '=', 0) // Orders from last month with non-zero tax
+                               ->get();
+                break;
+    
+            case 'yearly':
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfYear()->toDateString())
+                               ->where('total_tax', '=', 0) // Orders from this year with non-zero tax
+                               ->get();
+                break;
+    
+            default:
+                $orders = Order::where('total_tax', '=', 0) // Default case: filter orders with non-zero tax
+                               ->get();
+                break;
+        }
+    
+        $totalOrderWithoutFees = (!empty($orders)) ? count($orders) : 0;
+    
+        return $totalOrderWithoutFees;
+    }
+
+
+    public function averageOrdersPerDay($timePeriod) {
+        // Initialize the number of days to divide by
+        $days = 1; // Default to 1 day for 'today' and 'yesterday'
+    
+        // Get the orders based on the selected time period
+        switch ($timePeriod) {
+            case 'today':
+                $orders = Order::whereDate('date', Carbon::today()->toDateString())->get();
+                $days = 1; // 1 day for today
+                break;
+    
+            case 'yesterday':
+                $orders = Order::whereDate('date', Carbon::yesterday()->toDateString())->get();
+                $days = 1; // 1 day for yesterday
+                break;
+    
+            case 'last_seven_days':
+                $orders = Order::where('date', '>=', Carbon::now()->subDays(7)->toDateString())->get();
+                $days = 7; // 7 days for last 7 days
+                break;
+    
+            case 'this_month':
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfMonth()->toDateString())->get();
+                $days = Carbon::now()->daysInMonth; // Days in current month
+                break;
+    
+            case 'last_month':
+                $orders = Order::where('created_at', '>=', Carbon::now()->subMonth()->startOfMonth()->toDateString())
+                    ->where('created_at', '<', Carbon::now()->startOfMonth()->toDateString())->get();
+                $days = Carbon::now()->subMonth()->daysInMonth; // Days in last month
+                break;
+    
+            case 'yearly':
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfYear()->toDateString())->get();
+                $days = Carbon::now()->dayOfYear; // Days passed in this year
+                break;
+    
+            default:
+                $orders = Order::all(); // Get all orders if no valid time period is provided
+                $days = 1; // Default to 1 day
+                break;
+        }
+    
+        // Calculate the total number of orders
+        $totalOrders = $orders->count();
+    
+        // Calculate average orders per day
+        $averageOrdersPerDay = $days > 0 ? $totalOrders / $days : 0;
+    
+        return number_format($averageOrdersPerDay,"2",'.');
+    }
+
+
+    public function numberOfOrderByCities($timePeriod){
+        switch($timePeriod){
+            case 'today':
+                $orders = Order::whereDate('date', Carbon::today()->toDateString())->get(); // Orders placed today
+                break;
+        
+            case 'yesterday':
+                $orders = Order::whereDate('date', Carbon::yesterday()->toDateString())->get(); // Orders placed yesterday
+                break;
+        
+            case 'last_seven_days':
+                $orders = Order::where('date', '>=', Carbon::now()->subDays(7)->toDateString())->get(); // Orders placed in the last 7 days
+                break;
+        
+            case 'this_month':
+                // For Orders in This Month
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfMonth()->toDateString())->get();
+                break;
+        
+            case 'last_month':
+                $orders = Order::where('created_at', '>=', Carbon::now()->subMonth()->startOfMonth()->toDateString()) // First day of last month
+                                ->where('created_at', '<', Carbon::now()->startOfMonth()->toDateString()) // Before this month starts
+                                ->get();
+                break;
+        
+            case 'yearly':
+                $orders = Order::where('created_at', '>=', Carbon::now()->startOfYear()->toDateString())->get();
+                break;
+        
+            default:
+                $orders = Order::all(); // Get all orders if no valid time period is provided
+                break;
+        }
+
+
+        // Extracting city from the shipping address and counting orders by city
+        $ordersGroupedByCity = $orders->groupBy(function($order) {
+        return $order->shipping_address['city']; // Assuming the shipping address is stored as a JSON field
+        });
+
+        // Counting the number of orders per city
+        $ordersCountByCity = $ordersGroupedByCity->map(function($ordersInCity) {
+            return $ordersInCity->count(); // Get the count of orders in each city
+        });
+
+        // Prepare the data for the chart
+        $cities = $ordersCountByCity->keys()->toArray();
+        $orderCounts = $ordersCountByCity->values()->toArray();
+
+        // dd($cities,$orderCounts);
+
+        return ['cities' => $cities,'orderCounts' => $orderCounts];
+
+    }
+    
 }

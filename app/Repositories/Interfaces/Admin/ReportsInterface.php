@@ -17,7 +17,16 @@ interface ReportsInterface
 
     public function walletRechargeHistory($request, $limit);
 
+    public function totalOrderCount($timePeriod);
 
+    public function totalAmountOfOrder($timePeriod);
 
+    public function totalOrderWithFees($timePeriod);
+
+    public function totalOrderWithoutFees($timePeriod);
+
+    public function averageOrdersPerDay($timePeriod);
+
+    public function numberOfOrderByCities($timePeriod);
 
 }
