@@ -60,6 +60,7 @@ use App\Http\Controllers\Admin\WareHouseController;
 use App\Http\Controllers\Admin\PhysicalShopController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\RedirectController;
 
 Route::get('change-currency/{id}', [GeneralSettingsController::class, 'currencyChange'])->name('admin.change.currency');
 Route::get('change-lang/{id}', [GeneralSettingsController::class, 'langChange'])->name('admin.change.lang');
@@ -637,6 +638,13 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                   Route::put('employees/{employee}', [EmployeeController::class, 'update'])->name('employee.update');
                   Route::delete('delete/employees/{employee}', [CommonController::class, 'delete']);
 
+                  //Redirect
+                  Route::get('redirects', [RedirectController::class, 'index'])->name('redirect.index');
+                  Route::get('redirects/create', [RedirectController::class, 'create'])->name('redirect.create');
+                  Route::post('redirects', [RedirectController::class, 'store'])->name('redirect.store');
+                  Route::get('redirects/{id}/edit', [RedirectController::class, 'edit'])->name('redirect.edit');
+                  Route::put('redirects/{redirect}', [RedirectController::class, 'update'])->name('redirect.update');
+                  Route::delete('delete/redirects/{redirect}', [CommonController::class, 'delete']);
             });
         });
     });

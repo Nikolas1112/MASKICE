@@ -102,6 +102,14 @@
                         </a>
                     </li>
                 </ul>
+                <ul class="dropdown-menu">
+                    <li class="@yield('redirect_active')">
+                        <a class="nav-link" href="{{ route('redirect.index') }}">
+                            <i class="bx bx-redo"></i>
+                            <span>{{ __('Redirect') }}</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <li class="@yield('template_active')"><a class="nav-link" href="{{ route('templates.index') }}"><i

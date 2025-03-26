@@ -381,5 +381,11 @@ class RepositoryServiceProvider extends ServiceProvider{
             'App\Repositories\Interfaces\Admin\EmployeeInterface',
             'App\Repositories\Admin\EmployeeRepository'
         );
+
+        //redirect
+        $this->app->bind(
+            'App\Repositories\Interfaces\Admin\RedirectInterface',
+            'App\Repositories\Admin\RedirectRepository'
+        );
     }
 }
