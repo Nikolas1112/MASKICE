@@ -80,6 +80,10 @@
                     </a>
                 </li>
             @endif
+            <li class="@yield('survey_active')"><a class="nav-link" href="{{ route('survey.index') }}">
+                <i class="bx bxs-spreadsheet"></i>
+                <span>{{ __('Survey Poll') }}</span></a>
+            </li>
 
             <li class="nav-item dropdown @yield('administrators_active')">
                 <a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">

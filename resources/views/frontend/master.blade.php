@@ -175,6 +175,85 @@
             }
         }
         @endif
+        .modal {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            border-radius: 8px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border-bottom: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-title {
+            font-size: 24px;
+            margin: 0;
+        }
+        .close {
+            font-size: 28px;
+            color: white;
+            opacity: 0.8;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        .close:hover {
+            opacity: 1;
+        }
+        .modal-body {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        textarea.form-control {
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 14px;
+            width: 100%;
+            min-height: 120px;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        #submitSurveyBtn {
+            background-color: #28a745;
+        }
+        #submitSurveyBtn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        #skipButton {
+            background-color: #f0f0f0;
+            color: #007bff;
+            border: 1px solid #007bff;
+        }
+        #skipButton:hover {
+            background-color: #007bff;
+            color: white;
+            transform: scale(1.05);
+        }
+        .modal-footer {
+            border-top: none;
+            padding: 10px 15px;
+            justify-content: space-between;
+        }
+        .modal-body, .modal-footer {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
     </style>
 
     @if(request()->route()->getName() == 'product-details')
@@ -221,6 +300,31 @@
     </frontend_master>
 </div>
 
+
+<div class="modal" id="surveyModal" tabindex="-1" aria-labelledby="surveyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="surveyModalLabel">Survey Poll</h5>
+                <button type="button" class="close modal_close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body shopping-cart">
+                <div id="surveyBody">
+                    <!-- Dynamic content (question and textarea) will be injected here -->
+                </div>
+            </div>
+            <input type="hidden" id="surveyIdInput" value="">
+
+            <div class="modal-footer">
+                <button type="button" id="submitSurveyBtn" class="btn btn-primary" onclick="submitSurvey()" disabled>Submit</button>
+                <button type="button" id="skipButton" class="btn btn-secondary" onclick="skipQuestion()">Skip</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <input type="hidden" id="token" value="{{ csrf_token() }}">
 <input type="hidden" id="base_url" value="{{ url('/') }}">
 <input type="hidden" id="app_path" value="{{ config('app.app_path', '/') }}">
@@ -241,6 +345,143 @@
     <input type="hidden" value="{{ settingHelper('pusher_app_cluster') }}" id="f_pusher_app_cluster">
 @endif
 <script>
+    var surveyModal = document.getElementById('surveyModal');
+    var closeButton = document.querySelector('.modal_close');
+    var submitButton = document.getElementById('submitSurveyBtn');
+    var skipButton = document.getElementById('skipButton');  // Skip button element
+
+    let isUserLogIn = "{{$isLoggedIn}}";
+    if (isUserLogIn) {
+        if (getCookie('surveyClosed') !== 'true') {
+            window.onload = function() {
+                setTimeout(function() {
+                    loadQuestion();
+                }, 5000);
+            }
+        }
+    }
+
+    closeButton.addEventListener('click', () => {
+        surveyModal.classList.remove('show');
+        setCookie('surveyClosed', 'true', 365);
+    });
+
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function loadQuestion() {
+        $.ajax({
+            url: '/get-next-question',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+            },
+            success: function(response) {
+                console.log('AJAX Response:', response.question);
+
+                console.log(response.question);
+                if (response.question) {
+                    $('#surveyBody').html(`
+                    <p><strong>${response.question}</strong></p>
+                    <textarea id="answerInput" class="form-control" rows="4" placeholder="Enter your response here..."></textarea>
+                `);
+
+                    $('#surveyIdInput').val(response.survey_id);
+
+                    $('#submitSurveyBtn').prop('disabled', false);
+
+                    if (response.hasNextQuestion) {
+                        $('#skipButton').show();
+                        surveyModal.classList.add('show');
+                    } else {
+                        $('#skipButton').hide();
+                        surveyModal.classList.add('show');
+                    }
+                } else {
+                    $('#surveyBody').html('<p>Thank you for completing the survey!</p>');
+                    $('#submitSurveyBtn').hide();
+                    $('#skipButton').hide();
+
+                    setTimeout(function() {
+                        surveyModal.classList.remove('show');
+                    }, 2000);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
+        });
+    }
+
+    function submitSurvey() {
+        let userAnswer = $('#answerInput').val().trim();
+        let currentSurveyId = $('#surveyIdInput').val();
+        if (!userAnswer) {
+            alert('Please provide an answer!');
+            return;
+        }
+
+        $.ajax({
+            url: '/submit-survey',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                answer: userAnswer,
+                survey_id: currentSurveyId,
+            },
+            success: function(response) {
+                loadQuestion();
+            }
+        });
+    }
+
+    function skipQuestion() {
+        let currentSurveyId = $('#surveyIdInput').val();
+
+        $.ajax({
+            url: '/skip-survey',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                survey_id: currentSurveyId,
+            },
+            success: function(response) {
+                $('#surveyBody').html(`
+                <p><strong>${response.question}</strong></p>
+                <textarea id="answerInput" class="form-control" rows="4" placeholder="Enter your response here..."></textarea>
+            `);
+                $('#submitSurveyBtn').prop('disabled', false);
+
+                if (response.hasNextQuestion) {
+                    $('#skipButton').show();
+                } else {
+                    $('#skipButton').hide();
+                }
+
+                $('#surveyIdInput').val(response.survey_id);
+            }
+        });
+    }
+
+
     let conversation_active = '{{ settingHelper('conversation') }}';
     let fb_object = {
         status: '{{ settingHelper('is_facebook_messenger_activated') }}',

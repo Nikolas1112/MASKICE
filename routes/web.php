@@ -211,6 +211,11 @@ Route::middleware(['XSS', 'isInstalled'])->group(function () {
     Route::post('find/variants', [ProductController::class, 'variants']);
     Route::get('home/remove-compare_product/{id}', [CompareController::class, 'removeCompareProduct'])->name('product.remove.compareList');
     Route::get('home/add-to-compare/{id}', [CompareController::class, 'addToCompare'])->name('product.addToCompare');
+    Route::post('/get-next-question', [FrontendController::class, 'getNextQuestion'])->name('survey.next');
+    Route::post('/submit-survey', [FrontendController::class, 'submitSurvey'])->name('survey.submit');
+    Route::post('/skip-survey', [FrontendController::class, 'skipSurvey'])->name('survey.skip');
+
+
 
     Route::get('/home/blogs', [BlogController::class, 'blogs'])->name('front.blogs');
     Route::get('/home/blog-details/{slug}', [BlogController::class, 'blogDetails'])->name('blog.details');

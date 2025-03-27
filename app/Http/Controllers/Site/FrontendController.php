@@ -11,6 +11,8 @@ use App\Http\Resources\SiteResource\ProductPaginateResource;
 use App\Http\Resources\SiteResource\ShopPaginateResource;
 use App\Http\Resources\SiteResource\VideoPaginateResource;
 use App\Http\Resources\SiteResource\WishlistResource;
+use App\Models\SurveyResponse;
+use App\Models\Surveys;
 use App\Repositories\Admin\Page\PageRepository;
 use App\Repositories\Interfaces\Admin\Addon\VideoShoppingInterface;
 use App\Repositories\Interfaces\Admin\Blog\BlogInterface;
@@ -445,5 +447,97 @@ class FrontendController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
+    }
+
+    public function getNextQuestion(Request $request)
+    {
+        $answeredSurveyIds = SurveyResponse::where('user_id', authId())
+            ->pluck('survey_id')
+            ->toArray();
+
+        $surveyQuestions = Surveys::with('responses')
+            ->where('is_active', 1)
+            ->whereNotIn('id', $answeredSurveyIds)
+            ->get();
+
+        if ($surveyQuestions->isEmpty()) {
+            return response()->json([
+                'message' => 'Thank you for completing the survey!',
+                'completed' => true,
+            ]);
+        }
+
+        $survey = $surveyQuestions->first();
+        $hasNextQuestion = $surveyQuestions->count() > 1;
+
+        return response()->json([
+            'question' => $survey->question,
+            'answers' => $survey->answer,
+            'survey_id' => $survey->id,
+            'hasNextQuestion' => $hasNextQuestion,
+            'completed' => false,
+        ]);
+    }
+
+    public function submitSurvey(Request $request)
+    {
+        $request->validate([
+            'answer' => 'required|string|max:255',
+        ]);
+
+        SurveyResponse::create([
+            'survey_id' => $request->input('survey_id'),
+            'user_id' => authId(),
+            'answer' => $request->input('answer'),
+        ]);
+
+        return response()->json(['message' => 'Your answer has been recorded!']);
+    }
+
+    public function skipSurvey(Request $request)
+    {
+        $request->validate([
+            'survey_id' => 'required|exists:surveys,id',
+        ]);
+
+        $currentSurvey = Surveys::find($request->survey_id);
+
+        if (!$currentSurvey) {
+            return response()->json([
+                'message' => 'Thank you for completing the survey!',
+                'completed' => true,
+            ]);
+        }
+
+        $answeredSurveyIds = SurveyResponse::where('user_id', authId())
+            ->pluck('survey_id')
+            ->toArray();
+
+        $nextSurvey = Surveys::where('is_active', 1)
+            ->whereNotIn('id', $answeredSurveyIds)
+            ->where('id', '>', $currentSurvey->id)
+            ->first();
+
+        if (!$nextSurvey) {
+            session(['question_index' => 0]);
+            return response()->json([
+                'message' => 'Thank you for completing the survey!',
+                'completed' => true,
+            ]);
+        }
+
+        $questionIndex = session('question_index', 0);
+        session(['question_index' => $questionIndex + 1]);
+
+        return response()->json([
+            'question' => $nextSurvey->question,
+            'answers' => $nextSurvey->answer,
+            'survey_id' => $nextSurvey->id,
+            'hasNextQuestion' => Surveys::where('is_active', 1)
+                ->whereNotIn('id', $answeredSurveyIds)
+                ->where('id', '>', $nextSurvey->id)
+                ->exists(),
+            'completed' => false,
+        ]);
     }
 }

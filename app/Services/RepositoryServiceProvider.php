@@ -387,5 +387,18 @@ class RepositoryServiceProvider extends ServiceProvider{
             'App\Repositories\Interfaces\Admin\RedirectInterface',
             'App\Repositories\Admin\RedirectRepository'
         );
+
+        //survey
+        $this->app->bind(
+        'App\Repositories\Interfaces\Admin\SurveyInterface',
+        'App\Repositories\Admin\SurveyRepository'
+        );
+
+        //survey language
+        $this->app->bind(
+        'App\Repositories\Interfaces\Admin\SurveysLanguageInterface',
+        'App\Repositories\Admin\SurveyLanguageRepository'
+        );
+
     }
 }

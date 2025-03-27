@@ -8,6 +8,7 @@
 
 use App\Http\Controllers\Admin\Addons\ShippingClassController;
 use App\Http\Controllers\Admin\EmailTemplateController;
+use App\Http\Controllers\Admin\SurveyController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FontController;
 use App\Http\Controllers\Admin\RoleController;
@@ -645,6 +646,14 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                   Route::get('redirects/{id}/edit', [RedirectController::class, 'edit'])->name('redirect.edit');
                   Route::put('redirects/{redirect}', [RedirectController::class, 'update'])->name('redirect.update');
                   Route::delete('delete/redirects/{redirect}', [CommonController::class, 'delete']);
+
+                 //Survey
+                 Route::get('survey', [SurveyController::class, 'index'])->name('survey.index');
+                 Route::get('survey/create', [SurveyController::class, 'create'])->name('survey.create');
+                 Route::post('survey', [SurveyController::class, 'store'])->name('survey.store');
+                 Route::get('survey/{survey}/edit', [SurveyController::class, 'edit'])->name('survey.edit');
+                 Route::put('survey/{survey}', [SurveyController::class, 'update'])->name('survey.update');
+                 Route::delete('delete/surveys/{survey}', [CommonController::class, 'delete']);
             });
         });
     });

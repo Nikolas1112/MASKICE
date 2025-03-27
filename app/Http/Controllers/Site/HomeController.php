@@ -32,6 +32,7 @@ use App\Traits\MetaGeneratorTrait;
 use App\Traits\ResetPasswordTrait;
 use App\Utility\AppSettingUtility;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -101,7 +102,6 @@ class HomeController extends Controller
             }
 
             $default_currency = $currency->get($default_currency);
-
             $data = [
                 'settings' => $this->settingsData($page),
                 'languages' => settingHelper('language_switcher') == 1 ? $language->activeLanguages() : [],
@@ -136,6 +136,7 @@ class HomeController extends Controller
                     'image_57x57' => @is_file_exists(@settingHelper('favicon')['image_57x57_url']) ? get_media(settingHelper('favicon')['image_57x57_url']) : static_asset('images/ico/apple-touch-icon-57-precomposed.png'),
                 ],
                 'default_assets' => $this->defaultAssets(),
+                'isLoggedIn' => authUser(),
             ];
             return view('frontend.master', $data);
         } catch (\Exception $e) {

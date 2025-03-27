@@ -15,7 +15,7 @@
                     <h2 class="section-title">{{ $title }}</h2>
                 </div>
                 <div class="buttons add-button">
-                    <a href="{{ route('services.index')}}" class="btn btn-icon icon-left btn-outline-primary"><i
+                    <a href="{{ route('templates.index')}}" class="btn btn-icon icon-left btn-outline-primary"><i
                                 class="bx bx-arrow-back"></i>{{ __('Back') }}</a>
                 </div>
             </div>
