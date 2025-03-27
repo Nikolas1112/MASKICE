@@ -123,6 +123,14 @@
                         </a>
                     </li>
                 </ul>
+                <ul class="dropdown-menu">
+                    <li class="@yield('warehouseWorker_active')">
+                        <a class="nav-link" href="{{ route('warehouseworker.index') }}">
+                            <i class="bx bx-store"></i> <!-- Warehouse-related icon -->
+                            <span>{{ __('WarehouseWorkers') }}</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <li class="@yield('template_active')"><a class="nav-link" href="{{ route('templates.index') }}"><i

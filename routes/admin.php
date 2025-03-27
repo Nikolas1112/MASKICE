@@ -63,6 +63,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\SalaryController;
+use App\Http\Controllers\Admin\WarehouseWorkerController;
 
 Route::get('change-currency/{id}', [GeneralSettingsController::class, 'currencyChange'])->name('admin.change.currency');
 Route::get('change-lang/{id}', [GeneralSettingsController::class, 'langChange'])->name('admin.change.lang');
@@ -663,8 +664,9 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                  Route::get('salaries/{id}/edit', [SalaryController::class, 'edit'])->name('salaries.edit');
                  Route::put('salaries/{salaries}', [SalaryController::class, 'update'])->name('salaries.update');
                  Route::delete('delete/salaries/{salaries}', [SalaryController::class, 'delete']); 
-
-               
+                 
+                //warehouseworker
+                Route::get('warehouse-workers', [WarehouseWorkerController::class, 'index'])->name('warehouseworker.index');
             });
         });
     });

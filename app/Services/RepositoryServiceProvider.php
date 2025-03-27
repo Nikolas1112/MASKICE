@@ -400,5 +400,10 @@ class RepositoryServiceProvider extends ServiceProvider{
         'App\Repositories\Admin\SurveyLanguageRepository'
         );
 
+        //warehouseworker
+        $this->app->bind(
+        'App\Repositories\Interfaces\Admin\WarehouseWorkerInterface',
+        'App\Repositories\Admin\WarehouseWorkerRepository'
+        );
     }
 }

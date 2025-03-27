@@ -70,6 +70,9 @@
                                         <option value="">{{__('Select Role')}}</option>
                                         <option value="warehouse_worker" {{ isset($edit) && $edit->group == 'warehouse_worker' ? 'selected' : '' }}>{{__('Warehouse Worker')}}</option>
                                         <option value="seller" {{ isset($edit) && $edit->group == 'seller' ? 'selected' : '' }}>{{__('Seller')}}</option>
+                                        <option value="empolyee" {{ isset($edit) && $edit->group == 'empolyee' ? 'selected' : '' }}>{{__('Empolyee')}}</option>
+                                        <option value="cashier" {{ isset($edit) && $edit->group == 'cashier' ? 'selected' : '' }}>{{__('Cashier')}}</option>
+                                        <option value="moderator" {{ isset($edit) && $edit->group == 'moderator' ? 'selected' : '' }}>{{__('Moderator')}}</option>
                                     </select>
                                 </div>
 
