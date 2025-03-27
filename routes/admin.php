@@ -62,6 +62,7 @@ use App\Http\Controllers\Admin\PhysicalShopController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\RedirectController;
+use App\Http\Controllers\Admin\SalaryController;
 
 Route::get('change-currency/{id}', [GeneralSettingsController::class, 'currencyChange'])->name('admin.change.currency');
 Route::get('change-lang/{id}', [GeneralSettingsController::class, 'langChange'])->name('admin.change.lang');
@@ -654,6 +655,16 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                  Route::get('survey/{survey}/edit', [SurveyController::class, 'edit'])->name('survey.edit');
                  Route::put('survey/{survey}', [SurveyController::class, 'update'])->name('survey.update');
                  Route::delete('delete/surveys/{survey}', [CommonController::class, 'delete']);
+
+                 //salaries
+                Route::resource('salaries', SalaryController::class);
+                 Route::get('salaries/create', [SalaryController::class, 'create'])->name('salaries.create');
+                 Route::post('salaries', [SalaryController::class, 'store'])->name('salaries.store');
+                 Route::get('salaries/{id}/edit', [SalaryController::class, 'edit'])->name('salaries.edit');
+                 Route::put('salaries/{salaries}', [SalaryController::class, 'update'])->name('salaries.update');
+                 Route::delete('delete/salaries/{salaries}', [SalaryController::class, 'delete']); 
+
+               
             });
         });
     });

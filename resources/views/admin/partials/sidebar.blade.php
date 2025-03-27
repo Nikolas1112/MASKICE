@@ -107,6 +107,15 @@
                     </li>
                 </ul>
                 <ul class="dropdown-menu">
+                    <li class="@yield('salaries_active')">
+                        <a class="nav-link" href="{{ route('salaries.index') }}">
+                            <i class="bx bx-money"></i>
+                            <span>{{ __('salaries') }}</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="dropdown-menu">
                     <li class="@yield('redirect_active')">
                         <a class="nav-link" href="{{ route('redirect.index') }}">
                             <i class="bx bx-redo"></i>
