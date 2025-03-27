@@ -348,7 +348,7 @@
     var surveyModal = document.getElementById('surveyModal');
     var closeButton = document.querySelector('.modal_close');
     var submitButton = document.getElementById('submitSurveyBtn');
-    var skipButton = document.getElementById('skipButton');  // Skip button element
+    var skipButton = document.getElementById('skipButton');
 
     let isUserLogIn = "{{$isLoggedIn}}";
     if (isUserLogIn) {
@@ -363,7 +363,7 @@
 
     closeButton.addEventListener('click', () => {
         surveyModal.classList.remove('show');
-        setCookie('surveyClosed', 'true', 365);
+        setCookie('surveyClosed', 'true', 7);
     });
 
     function setCookie(name, value, days) {

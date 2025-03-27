@@ -11,14 +11,13 @@ class Surveys extends Model
 
     protected $fillable = ['name', 'question', 'is_active'];
 
-    public function options(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(SurveyResponse::class);
-    }
+
+    protected  $appends = ['total_votes'];
+
 
     public function votes(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(SurveyResponse::class);
+        return $this->hasMany(SurveyResponse::class, 'survey_id');
     }
 
     public function getTotalVotesAttribute(): int
@@ -26,8 +25,9 @@ class Surveys extends Model
         return $this->votes()->count();
     }
 
-    public function responses()
+
+    public function responses(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(SurveyResponse::class, 'survey_id'); // Assuming 'survey_id' is the foreign key in SurveyResponse
+        return $this->hasMany(SurveyResponse::class, 'survey_id');
     }
 }

@@ -78,12 +78,11 @@ $title = isset($edit) ? trans('Survey Pool Edit') : __('Survey Pool Add')
 
                             <div class="form-group row mt-2">
                                 <label class="col-md-2 col-form-label">{{ __('Status') }}</label>
-                                <input type="hidden" name="is_active" value="0">
+                                <input type="hidden" name="is_active" value="0"> <!-- Ensures unchecked state is submitted -->
                                 <div class="col-md-10">
                                     <label class="custom-switch">
-                                        <input type="checkbox" value="1" name="is_active"
-                                               class="custom-switch-input"
-                                               {{ old('is_active', 1) == 1 ? 'checked' : '' }}>
+                                        <input type="checkbox" name="is_active" value="1" class="custom-switch-input"
+                                               {{ (old('is_active', isset($survey_language) ? $survey_language->is_active : 0) == 1) ? 'checked' : '' }}>
                                         <span class="custom-switch-indicator"></span>
                                         <span class="custom-switch-description">{{ __("This question is currently active.") }}</span>
                                     </label>

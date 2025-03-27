@@ -12,8 +12,8 @@ class SurveyResponse extends Model
     protected $fillable = ['survey_id', 'user_id', 'answer'];
 
 
-    public function survey()
+    public function survey(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Surveys::class, 'survey_id'); // Specify the foreign key
+        return $this->belongsTo(Surveys::class, 'survey_id');
     }
 }

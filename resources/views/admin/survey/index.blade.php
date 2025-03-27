@@ -45,7 +45,7 @@ active
                                     <td>{{ $survey->id }}</td>
                                     <td>{{ $survey->name }}</td>
                                     <td>{{ $survey->question }}</td>
-                                    <td>{{ 10 }}</td>
+                                    <td>{{ $survey->total_votes }}</td>
                                     <td>{{ $survey->created_at }}</td>
                                     <td>
                                         @if($survey->is_active)
@@ -58,7 +58,7 @@ active
                                         <a href="{{route('survey.edit',$survey->id)}}" class="btn btn-outline-secondary btn-circle"
                                            data-toggle="tooltip" title=""
                                            data-original-title="{{ __('Edit') }}"><i class="bx bx-edit"></i></a>
-                                        <a href="javascript:void(0)" onclick="delete_row('delete/email_templates/',{{ $survey->id }})"
+                                        <a href="javascript:void(0)" onclick="delete_row('delete/surveys/',{{ $survey->id }})"
                                            class="btn btn-outline-danger btn-circle" data-toggle="tooltip"
                                            title=""
                                            data-original-title="{{ __('Delete') }}"><i class="bx bx-trash"></i></a>
