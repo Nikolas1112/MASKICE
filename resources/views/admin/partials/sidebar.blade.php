@@ -187,6 +187,9 @@
                             <li class="@yield('product_review')"><a class="nav-link"
                                                                     href="{{ route('admin.product.reviews') }}">{{ __('Product Reviews') }}</a>
                             </li>
+                            <li class="@yield('product_low_on_stocks')">
+                                <a class="nav-link" href="{{ route('admin.product.low_on_stock') }}">{{ __('Product Low On Stocks') }}</a>
+                            </li>
                         @endif
                         @if(hasPermission('color_read'))
                             <li class="@yield('color_active')"><a class="nav-link"

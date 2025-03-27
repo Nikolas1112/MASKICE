@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Product\ProductStoreRequest;
 use App\Models\City;
+use App\Models\OrderDetail;
 use App\Models\ProductCity;
 use App\Models\ProductStock;
 use App\Models\ReviewReply;
@@ -539,6 +540,31 @@ class ProductController extends Controller
     {
         $reviews = $review->paginateReviews($request->all());
         return view('admin.products.products.review',compact('reviews'));
+    }
+
+    public function productLowOnStocks(ReviewInterface $review,Request $request)
+    {
+        $productStocks = ProductStock::query()->with('product')->where('current_stock','<',10)->where('name','!=','')->whereNotNull('name')->get();
+        $productStocksArray = [];
+        foreach($productStocks as $key => $productStock){
+
+            $reservedStocksForOrder = OrderDetail::query()->whereHas('order',function($query){
+                $query->where('delivery_status','pending');
+            })->where('product_id',$productStock->product_id)->where('variation',$productStock->name)->sum('quantity');
+            
+            $productStocksArray[] = [
+                'product_id' => $productStock->product_id,
+                'product_name' => $productStock->name,
+                'product_code' => $productStock->sku,
+                'product_image' => $productStock->image,
+                'product_amount' => $productStock->price,
+                'stock_reserved' => $reservedStocksForOrder,
+                'stocks_available' => $productStock->current_stock,
+                'stock_threshold' => $productStock->product->low_stock_to_notify 
+            ];
+        }   
+       
+        return view('admin.products.products.low_on_stocks',['product_stocks' => $productStocksArray]);
     }
 
     public function replies($review_id)

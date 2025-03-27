@@ -128,6 +128,7 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                 Route::get('classified-product/{status?}', [ProductController::class, 'classifiedProducts'])->name('classified.products')->middleware('PermissionCheck:product_read');
                 Route::get('create-classified-product', [ProductController::class, 'createClassifiedProduct'])->name('classified.product.create')->middleware('PermissionCheck:product_create');
                 Route::get('product-reviews', [ProductController::class, 'reviews'])->name('admin.product.reviews')->middleware('PermissionCheck:product_create');
+                Route::get('product-low-on-stocks', [ProductController::class, 'productLowOnStocks'])->name('admin.product.low_on_stock')->middleware('PermissionCheck:product_read');
                 Route::get('product-replies/{id}', [ProductController::class, 'replies'])->name('admin.product.replies')->middleware('PermissionCheck:product_create');
                 Route::put('review-status-change', [ProductController::class, 'reviewStatusChange'])->name('admin.review.status.change');
 
