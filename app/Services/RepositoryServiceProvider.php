@@ -411,5 +411,11 @@ class RepositoryServiceProvider extends ServiceProvider{
         'App\Repositories\Interfaces\Admin\SupplierInterface',
         'App\Repositories\Admin\SupplierRepository'
         );
+
+        //Write Off Supplies
+        $this->app->bind(
+            'App\Repositories\Interfaces\Admin\WriteOffSuppliesInterface',
+            'App\Repositories\Admin\WriteOffSuppliesRepository'
+        );
     }
 }

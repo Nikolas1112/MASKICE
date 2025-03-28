@@ -66,7 +66,8 @@ use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\SalaryController;
 use App\Http\Controllers\Admin\WarehouseWorkerController;
 use App\Models\LogActivity;
-use App\Http\Controllers\Admin\SupplierController;  
+use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\WriteOffSuppliesController;
 
 Route::get('change-currency/{id}', [GeneralSettingsController::class, 'currencyChange'])->name('admin.change.currency');
 Route::get('change-lang/{id}', [GeneralSettingsController::class, 'langChange'])->name('admin.change.lang');
@@ -660,6 +661,14 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                  Route::get('survey/{survey}/edit', [SurveyController::class, 'edit'])->name('survey.edit');
                  Route::put('survey/{survey}', [SurveyController::class, 'update'])->name('survey.update');
                  Route::delete('delete/surveys/{survey}', [CommonController::class, 'delete']);
+
+                //Write Off Supplies
+                Route::get('writeoff-supplies', [WriteOffSuppliesController::class, 'index'])->name('writeoff.supplies.index');
+                Route::get('writeoff-supplies/create', [WriteOffSuppliesController::class, 'create'])->name('writeoff.supplies.create');
+                Route::post('writeoff-supplies', [WriteOffSuppliesController::class, 'store'])->name('writeoff.supplies.store');
+                Route::get('writeoff-supplies/{id}/edit', [WriteOffSuppliesController::class, 'edit'])->name('writeoff.supplies.edit');
+                Route::put('writeoff-supplies/{id}', [WriteOffSuppliesController::class, 'update'])->name('writeoff.supplies.update');
+                Route::delete('delete/writeoff_supplies/{id}', [CommonController::class, 'delete']);
 
                  //salaries
                 Route::resource('salaries', SalaryController::class);
