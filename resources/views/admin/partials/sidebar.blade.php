@@ -224,6 +224,26 @@
                 </li>
             @endif
 
+            @if(hasPermission('stock_report_read'))
+                <li class="nav-item dropdown @yield('stock_report_active')">
+                    <a href="javaScript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">
+                        <i class="bx bx-package"></i>
+                        <span>{{ __('Stock Report') }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="@yield('stock_overview')">
+                            <a class="nav-link" href="{{ route('admin.stock.report.overview') }}">{{ __('Overview') }}</a>
+                        </li>
+                        <li class="@yield('stock_movement')">
+                            <a class="nav-link" href="{{ route('admin.stock.report.movement') }}">{{ __('Stock Movement') }}</a>
+                        </li>
+                        <li class="@yield('stock_verification')">
+                            <a class="nav-link" href="{{ route('admin.stock.report.verification') }}">{{ __('Stock Verification') }}</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
             @if(hasPermission('wholesale_product_read') && addon_is_activated('wholesale'))
                 <li class="nav-item dropdown @yield('wholesale')">
                     <a href="javaScript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">

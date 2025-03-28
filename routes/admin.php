@@ -668,6 +668,14 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                  
                 //warehouseworker
                 Route::get('warehouse-workers', [WarehouseWorkerController::class, 'index'])->name('warehouseworker.index');
+
+
+                Route::get('stock-report/overview', [\App\Http\Controllers\Admin\StockReportController::class, 'overview'])
+                    ->name('admin.stock.report.overview');
+                Route::get('stock-report/movement', [\App\Http\Controllers\Admin\StockReportController::class, 'movement'])
+                    ->name('admin.stock.report.movement');
+                Route::get('stock-report/verification', [\App\Http\Controllers\Admin\StockReportController::class, 'verification'])
+                    ->name('admin.stock.report.verification');
             });
         });
     });
