@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use PDF;
 use App\Models\LogActivity as LogActivityModel;
 use App\Traits\GetUserBrowser;
+use Stevebauman\Location\Facades\Location;
 use Sentinel;
 
 class CommonController extends Controller
