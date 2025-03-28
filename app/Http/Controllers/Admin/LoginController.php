@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Sentinel;
 use Cartalyst\Sentinel\Laravel\Facades\Activation;
+use Stevebauman\Location\Facades\Location;
 
 class LoginController extends Controller
 {
@@ -163,13 +164,20 @@ class LoginController extends Controller
                     'error' => __('You are banned')
                 ]);
             }
-            $log            = [];
-            $log['url']     = \Request::fullUrl();
-            $log['method']  = \Request::method();
-            $log['ip']      = \Request::ip();
-            $log['browser'] = $this->getBrowser(\Request::header('user-agent'));
-            $log['platform']= $this->getPlatForm(\Request::header('user-agent'));
-            $log['user_id'] = $user->id;
+            $log = [];
+            $log['url']         = \Request::fullUrl();
+            $log['method']      = \Request::method();
+            $log['ip']          = \Request::ip();
+            $log['browser']     = $this->getBrowser(\Request::header('user-agent'));
+            $log['platform']    = $this->getPlatForm(\Request::header('user-agent'));
+            $log['user_id']     = Sentinel::getUser()->id;  // Logged-in user ID
+            $log['log_name']    = "Admin Login";  // Action name (Logout)
+            $log['description'] = Sentinel::getUser()->first_name . " " . Sentinel::getUser()->last_name . " has Logged in.";  // User description
+            $log['subject_type'] = get_class(Sentinel::getUser());  // The model class (e.g., App\Models\User)
+            $log['event']       = "Login";  // Event name (Logout)
+            $log['location']    = Location::get(request()->ip());  // Get the location based on IP
+        
+            // Store the activity log
             LogActivityModel::create($log);
 
             return response()->json([
@@ -228,6 +236,22 @@ class LoginController extends Controller
                 $redirect_to = 'login';
             endif;
 
+            $log = [];
+            $log['url']         = \Request::fullUrl();
+            $log['method']      = \Request::method();
+            $log['ip']          = \Request::ip();
+            $log['browser']     = $this->getBrowser(\Request::header('user-agent'));
+            $log['platform']    = $this->getPlatForm(\Request::header('user-agent'));
+            $log['user_id']     = Sentinel::getUser()->id;  // Logged-in user ID
+            $log['log_name']    = "Logout";  // Action name (Logout)
+            $log['description'] = Sentinel::getUser()->first_name . " " . Sentinel::getUser()->last_name . " has logged out.";  // User description
+            $log['subject_type'] = get_class(Sentinel::getUser());  // The model class (e.g., App\Models\User)
+            $log['event']       = "Logout";  // Event name (Logout)
+            $log['location']    = Location::get(request()->ip());  // Get the location based on IP
+            
+            // Store the activity log
+            LogActivityModel::create($log);
+
 
             Sentinel::logout();
             if (request()->ajax()) {
@@ -260,6 +284,23 @@ class LoginController extends Controller
             $user = Sentinel::findById($id);
             try {
                 Sentinel::authenticate($user);
+
+                $log = [];
+                $log['url']         = \Request::fullUrl();
+                $log['method']      = \Request::method();
+                $log['ip']          = \Request::ip();
+                $log['browser']     = $this->getBrowser(\Request::header('user-agent'));
+                $log['platform']    = $this->getPlatForm(\Request::header('user-agent'));
+                $log['user_id']     = Sentinel::getUser()->id;  // Logged-in user ID
+                $log['log_name']    = "User Login";  // Action name (Logout)
+                $log['description'] = Sentinel::getUser()->first_name . " " . Sentinel::getUser()->last_name . " has Logged in.";  // User description
+                $log['subject_type'] = get_class(Sentinel::getUser());  // The model class (e.g., App\Models\User)
+                $log['event']       = "Login";  // Event name (Logout)
+                $log['location']    = Location::get(request()->ip());  // Get the location based on IP
+            
+                // Store the activity log
+                LogActivityModel::create($log);
+
                 Toastr::success(__('Successfully Login'));
                 return redirect()->route('seller.dashboard')->with('success', __('Login As successfully'));
 
@@ -458,13 +499,20 @@ class LoginController extends Controller
                 Toastr::error(__('You are banned'));
                 return back()->withInput();
             }
-            $log            = [];
-            $log['url']     = \Request::fullUrl();
-            $log['method']  = \Request::method();
-            $log['ip']      = \Request::ip();
-            $log['browser'] = $this->getBrowser(\Request::header('user-agent'));
-            $log['platform']= $this->getPlatForm(\Request::header('user-agent'));
-            $log['user_id'] = $user->id;
+            $log = [];
+            $log['url']         = \Request::fullUrl();
+            $log['method']      = \Request::method();
+            $log['ip']          = \Request::ip();
+            $log['browser']     = $this->getBrowser(\Request::header('user-agent'));
+            $log['platform']    = $this->getPlatForm(\Request::header('user-agent'));
+            $log['user_id']     = Sentinel::getUser()->id;  // Logged-in user ID
+            $log['log_name']    = "Seller Login";  // Action name (Logout)
+            $log['description'] = Sentinel::getUser()->first_name . " " . Sentinel::getUser()->last_name . " has Logged in.";  // User description
+            $log['subject_type'] = get_class(Sentinel::getUser());  // The model class (e.g., App\Models\User)
+            $log['event']       = "Login";  // Event name (Logout)
+            $log['location']    = Location::get(request()->ip());  // Get the location based on IP
+        
+            // Store the activity log
             LogActivityModel::create($log);
 
             if ($user->user_type == 'admin' || $user->user_type == 'staff'):
@@ -477,5 +525,4 @@ class LoginController extends Controller
             return back()->withInput();
         }
     }
-
 }

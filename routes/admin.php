@@ -61,9 +61,11 @@ use App\Http\Controllers\Admin\WareHouseController;
 use App\Http\Controllers\Admin\PhysicalShopController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\LogActivityController;
 use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\SalaryController;
 use App\Http\Controllers\Admin\WarehouseWorkerController;
+use App\Models\LogActivity;
 
 Route::get('change-currency/{id}', [GeneralSettingsController::class, 'currencyChange'])->name('admin.change.currency');
 Route::get('change-lang/{id}', [GeneralSettingsController::class, 'langChange'])->name('admin.change.lang');
@@ -676,6 +678,9 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
                     ->name('admin.stock.report.movement');
                 Route::get('stock-report/verification', [\App\Http\Controllers\Admin\StockReportController::class, 'verification'])
                     ->name('admin.stock.report.verification');
+
+                //warehouseworker
+                Route::get('log-activity', [LogActivityController::class, 'index'])->name('logs.activity.index');
             });
         });
     });

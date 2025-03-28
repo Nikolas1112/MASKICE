@@ -1060,6 +1060,15 @@
                     </li>
                 @endif
             @endif
+
+            @if(settingHelper('current_version') != '1.0.0')
+                <li class="@yield('logs_activity')">
+                    <a class="nav-link" href="{{ route('logs.activity.index') }}">
+                        <i class="bx bx-wrench"></i>
+                        <span>{{ __('Logs Activity') }}</span>
+                    </a>
+                </li>
+            @endif
         </ul>
     </aside>
 </div>

@@ -14,10 +14,13 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PDF;
+use App\Models\LogActivity as LogActivityModel;
+use App\Traits\GetUserBrowser;
+use Sentinel;
 
 class CommonController extends Controller
 {
-    use PaymentTrait,PdfTrait;
+    use PaymentTrait,PdfTrait,GetUserBrowser;
     private $common;
 
     public function __construct(CommonInterface $common)
@@ -40,6 +43,25 @@ class CommonController extends Controller
         if (addon_is_activated('ramdhani') && $currentSegment == 'shipping-class'):
             $currentSegment = 'shipping_classes';
         endif;
+
+        if($currentSegment == "products"){
+            // add log activity in log_activity table
+            $log = [];
+            $log['url']         = \Request::fullUrl();
+            $log['method']      = \Request::method();
+            $log['ip']          = \Request::ip();
+            $log['browser']     = $this->getBrowser(\Request::header('user-agent'));
+            $log['platform']    = $this->getPlatForm(\Request::header('user-agent'));
+            $log['user_id']     = Sentinel::getUser()->id;  // Logged-in user ID
+            $log['log_name']    = "Product";  // Action name (Logout)
+            $log['description'] = Sentinel::getUser()->first_name . " " . Sentinel::getUser()->last_name . " has deleted product.";  // User description
+            $log['subject_type'] = get_class(Sentinel::getUser());  // The model class (e.g., App\Models\User)
+            $log['event']       = "Delete";  // Event name (Logout)
+            $log['location']    = Location::get(request()->ip());  // Get the location based on IP
+    
+        // Store the activity log
+        LogActivityModel::create($log);
+        }
         if ($status = $this->common->delete($currentSegment, $id)):
             if ($status === 'used'):
                 $response['message'] = __('Unable to delete because this type is already used');

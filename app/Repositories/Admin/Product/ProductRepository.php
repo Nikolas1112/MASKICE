@@ -21,10 +21,12 @@ use App\Traits\SlugTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Sentinel;
+use App\Models\LogActivity as LogActivityModel;
+use App\Traits\GetUserBrowser;
 
 class ProductRepository implements ProductInterface
 {
-    use SlugTrait, ImageTrait, RandomStringTrait;
+    use SlugTrait, ImageTrait, RandomStringTrait, GetUserBrowser;
 
     protected $productLang;
     protected $seller;
@@ -481,6 +483,23 @@ class ProductRepository implements ProductInterface
             $product_stock->save();
         endif;
 
+        $log = [];
+        $log['url']         = \Request::fullUrl();
+        $log['method']      = \Request::method();
+        $log['ip']          = \Request::ip();
+        $log['browser']     = $this->getBrowser(\Request::header('user-agent'));
+        $log['platform']    = $this->getPlatForm(\Request::header('user-agent'));
+        $log['user_id']     = Sentinel::getUser()->id;  // Logged-in user ID
+        $log['log_name']    = "Product";  // Action name (Logout)
+        $log['description'] = Sentinel::getUser()->first_name . " " . Sentinel::getUser()->last_name . " has Created Product.";  // User description
+        $log['subject_type'] = get_class(Sentinel::getUser());  // The model class (e.g., App\Models\User)
+        $log['event']       = "Create";  // Event name (Logout)
+        $log['location']    = Location::get(request()->ip());  // Get the location based on IP
+    
+        // Store the activity log
+        LogActivityModel::create($log);
+
+
         return true;
     }
 
@@ -781,6 +800,23 @@ class ProductRepository implements ProductInterface
             $product_stock->current_stock           = $product->current_stock;
             $product_stock->save();
         endif;
+
+        $log = [];
+        $log['url']         = \Request::fullUrl();
+        $log['method']      = \Request::method();
+        $log['ip']          = \Request::ip();
+        $log['browser']     = $this->getBrowser(\Request::header('user-agent'));
+        $log['platform']    = $this->getPlatForm(\Request::header('user-agent'));
+        $log['user_id']     = Sentinel::getUser()->id;  // Logged-in user ID
+        $log['log_name']    = "Product";  // Action name (Logout)
+        $log['description'] = Sentinel::getUser()->first_name . " " . Sentinel::getUser()->last_name . " has Updated Product.";  // User description
+        $log['subject_type'] = get_class(Sentinel::getUser());  // The model class (e.g., App\Models\User)
+        $log['event']       = "Update";  // Event name (Logout)
+        $log['location']    = Location::get(request()->ip());  // Get the location based on IP
+    
+        // Store the activity log
+        LogActivityModel::create($log);
+
         return true;
     }
 
@@ -799,6 +835,23 @@ class ProductRepository implements ProductInterface
             $view->save();
 
             DB::commit();
+
+            $log = [];
+            $log['url']         = \Request::fullUrl();
+            $log['method']      = \Request::method();
+            $log['ip']          = \Request::ip();
+            $log['browser']     = $this->getBrowser(\Request::header('user-agent'));
+            $log['platform']    = $this->getPlatForm(\Request::header('user-agent'));
+            $log['user_id']     = Sentinel::getUser()->id;  // Logged-in user ID
+            $log['log_name']    = "Product";  // Action name (Logout)
+            $log['description'] = Sentinel::getUser()->first_name . " " . Sentinel::getUser()->last_name . " has View Product.";  // User description
+            $log['subject_type'] = get_class(Sentinel::getUser());  // The model class (e.g., App\Models\User)
+            $log['event']       = "View";  // Event name (Logout)
+            $log['location']    = Location::get(request()->ip());  // Get the location based on IP
+        
+            // Store the activity log
+            LogActivityModel::create($log);
+
             return true;
         } catch (\Exception $e) {
             DB::rollback();

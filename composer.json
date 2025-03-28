@@ -49,6 +49,7 @@
     "rap2hpoutre/laravel-log-viewer": "^2.4",
     "razorpay/razorpay": "^2.8.1",
     "silviolleite/laravelpwa": "^2.0.3",
+    "stevebauman/location": "^7.5",
     "twilio/sdk": "^6.35.0",
     "tymon/jwt-auth": "^1.0",
     "unicodeveloper/laravel-paystack": "^1.0",
