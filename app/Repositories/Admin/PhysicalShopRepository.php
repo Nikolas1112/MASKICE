@@ -10,7 +10,7 @@ class PhysicalShopRepository implements PhysicalShopInterface
 {
     public function getAll(int $perPage = 10): LengthAwarePaginator
     {
-        return PhysicalShop::paginate($perPage);
+        return PhysicalShop::whereIsWebShop(false)->paginate($perPage);
     }
 
     public function findById(int $id): ?PhysicalShop

@@ -3,6 +3,7 @@
 namespace App\Repositories\Admin;
 
 use App\Models\SellerProfile;
+use App\Models\PhysicalShop;
 use App\Repositories\Interfaces\Admin\SellerProfileInterface;
 use App\Traits\ImageTrait;
 use App\Traits\SlugTrait;
@@ -77,9 +78,24 @@ class SellerProfileRepository implements SellerProfileInterface
         $seller->meta_description   = $request->meta_description;
         $seller->save();
 
+        $this->saveOrUpdateWebShop($seller->shop_name,$seller->address);
         return true;
     }
 
+    public function saveOrUpdateWebShop($shopName,$address){
+        PhysicalShop::updateOrCreate(
+            [
+                'name' => $shopName,
+                'is_web_shop' => true,
+            ],
+            [
+                'name' => $shopName,
+                'address' => $address
+              
+            ]
+        );
+    }
+    
     public function update($request): bool
     {
         $seller = SellerProfile::where('user_id', $request->user_id)->first();
@@ -90,7 +106,7 @@ class SellerProfileRepository implements SellerProfileInterface
                 $seller->is_supplier   = 0;
             }
         }
-
+    
         $seller->shop_name          = $request->shop_name;
         $seller->slug               = $this->getSlug($request->shop_name, $request->slug);
         $seller->phone_no           = $request->phone_no;
@@ -139,6 +155,8 @@ class SellerProfileRepository implements SellerProfileInterface
 
         $seller->license_no = $request->license_no;
         $seller->save();
+
+        $this->saveOrUpdateWebShop($seller->shop_name,$seller->address);
 
         return true;
     }
