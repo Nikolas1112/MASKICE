@@ -150,6 +150,12 @@
                     <span>{{ __('Physical Shop') }}</span>
                 </a>
             </li>
+            <li class="@yield('supplier_active')">
+                <a class="nav-link warehouse-icon" href="{{ route('supplier.index') }}"> 
+                    <i class="bx bxs-factory"></i> <!-- Change this icon if needed -->
+                    <span>{{ __('Suppliers') }}</span>
+                </a>
+            </li>
 
             @if(hasPermission('product_read') || hasPermission('color_read') || hasPermission('attribute_set_read') || hasPermission('brand_read') || hasPermission('category_read') || hasPermission('attribute_value_read'))
                 <li class="nav-item dropdown @yield('product_active')">

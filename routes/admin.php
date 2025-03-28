@@ -66,6 +66,7 @@ use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\SalaryController;
 use App\Http\Controllers\Admin\WarehouseWorkerController;
 use App\Models\LogActivity;
+use App\Http\Controllers\Admin\SupplierController;  
 
 Route::get('change-currency/{id}', [GeneralSettingsController::class, 'currencyChange'])->name('admin.change.currency');
 Route::get('change-lang/{id}', [GeneralSettingsController::class, 'langChange'])->name('admin.change.lang');
@@ -681,6 +682,14 @@ Route::middleware(['XSS','isInstalled'])->group(function () {
 
                 //warehouseworker
                 Route::get('log-activity', [LogActivityController::class, 'index'])->name('logs.activity.index');
+
+                //supplier
+                Route::get('suppliers', [SupplierController::class, 'index'])->name('supplier.index');
+                Route::get('suppliers/create', [SupplierController::class, 'create'])->name('supplier.create');
+                Route::post('suppliers', [SupplierController::class, 'store'])->name('supplier.store');
+                Route::get('suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
+                Route::put('suppliers/{redirect}', [SupplierController::class, 'update'])->name('supplier.update');
+                Route::delete('delete/suppliers/{redirect}', [CommonController::class, 'delete']);
             });
         });
     });

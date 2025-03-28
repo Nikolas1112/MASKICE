@@ -405,5 +405,11 @@ class RepositoryServiceProvider extends ServiceProvider{
         'App\Repositories\Interfaces\Admin\WarehouseWorkerInterface',
         'App\Repositories\Admin\WarehouseWorkerRepository'
         );
+
+         //supplier
+        $this->app->bind(
+        'App\Repositories\Interfaces\Admin\SupplierInterface',
+        'App\Repositories\Admin\SupplierRepository'
+        );
     }
 }

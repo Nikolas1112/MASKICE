@@ -51,6 +51,12 @@
                                    aria-selected="true">{{ __('Product Information') }}</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link bar {{ has_key(['supplier_name'],$errors) ? 'error' : '' }}"
+                                   id="supplier-tab" data-toggle="tab" href="#supplier_id" role="tab"
+                                   aria-controls="contact"
+                                   aria-selected="false">{{ __('Supplier Details') }}</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link bar {{ has_key(['thumbnail','images','video_provider','video_url'],$errors) ? 'error' : '' }}"
                                    id="images-and-videos-tab" data-toggle="tab" href="#images-and-videos" role="tab"
                                    aria-controls="home"
@@ -1331,6 +1337,50 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="supplier_id" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-header extra-padding">
+                                        <h4>{{ __('Supplier Name') }}</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="supplier_id">{{ __('Select Supplier') }}</label>
+                                            <select name="supplier_id" id="supplier_id" class="form-control"
+                                                onchange="document.querySelectorAll('.supplier-details').forEach(el => el.classList.remove('show'));
+                                                        document.getElementById('supplier_' + this.value)?.classList.add('show')">
+                                                <option value="">{{ __('Choose Supplier') }}</option>
+                                                @foreach($suppliers as $supplier)
+                                                    <option value="{{ $supplier->id }}">
+                                                        {{ $supplier->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        @foreach($suppliers as $supplier)
+                                            <div class="collapse supplier-details mt-5" id="supplier_{{ $supplier->id }}">
+                                                <h6>{{ __('Supplier Details') }}</h6>
+                                                <table class="table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>{{ __('Name') }}</th>
+                                                            <td>{{ $supplier->name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{{ __('Supplier Code') }}</th>
+                                                            <td>{{ $supplier->supplier_code }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{{ __('Supplier Price') }}</th>
+                                                            <td>{{ $supplier->supplier_price }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>

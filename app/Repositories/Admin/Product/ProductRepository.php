@@ -229,6 +229,7 @@ class ProductRepository implements ProductInterface
     public function store($request)
     {
         $product = new Product();
+        $product->supplier_id = $request->input('supplier_id');
         if (addon_is_activated('ramdhani'))
         {
             $product->shipping_class_id = $request->shipping_class_id;
@@ -507,6 +508,7 @@ class ProductRepository implements ProductInterface
     public function update($request)
     {
         $product = $this->get($request->id);
+        $product->supplier_id = $request->input('supplier_id');
         if (addon_is_activated('ramdhani'))
         {
             $product->shipping_class_id = $request->shipping_class_id;

@@ -25,6 +25,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Supplier;
 
 class ProductController extends Controller
 {
@@ -141,7 +142,8 @@ class ProductController extends Controller
                 'colors' => $this->colors->all()->where('lang', 'en')->get(),
                 'attributes' => $this->attributes->all()->where('lang', 'en')->get(),
                 'campaigns' => \App\Models\Campaign::where('status', 1)->where('end_date', '>', Carbon::now()->format('Y-m-d'))->get(),
-                'r' => $request->r != '' ? $request->r : $request->server('HTTP_REFERER')
+                'r' => $request->r != '' ? $request->r : $request->server('HTTP_REFERER'),
+                'suppliers' => Supplier::all()
             ];
             if (addon_is_activated('ramdhani')) {
                 $repo = new ShippingClassRepository();
@@ -214,7 +216,9 @@ class ProductController extends Controller
                     'r'                 => $request->r != ''? $request->r : $request->server('HTTP_REFERER'),
                     'languages'         => $languages,
                     'product_language'  => $product_language,
-                    'lang'              => $lang
+                    'lang'              => $lang,
+                    'suppliers'         => Supplier::all(),
+                    'product'           => $product,
                 ];
 
                 if (addon_is_activated('ramdhani')) {

@@ -52,7 +52,8 @@ class ProductStoreRequest extends FormRequest
             'special_discount'          => 'required_with:special_discount_type',
 
             'campaign_discount'         => 'required_with:campaign',
-            'campaign_discount_type'    => 'required_with:campaign'
+            'campaign_discount_type'    => 'required_with:campaign',
+            'supplier_id' => 'required|exists:suppliers,id'
         ];
 
         if (!in_array(1,[$request->is_classified,$request->is_catalog]))
