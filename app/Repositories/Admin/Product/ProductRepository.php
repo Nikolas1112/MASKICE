@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Sentinel;
 use App\Models\LogActivity as LogActivityModel;
 use App\Traits\GetUserBrowser;
+use Stevebauman\Location\Facades\Location;
 
 class ProductRepository implements ProductInterface
 {
